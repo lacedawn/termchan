@@ -12,7 +12,9 @@ browse 4chan from your terminal
 
 ## demo
 
-*(Video demo coming soon!)*
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/2a92f92a-19b5-47ee-b901-8ca4c99c84ec" width="100%" autoplay loop muted playsinline></video>
+</div>
 
 ## install
 
