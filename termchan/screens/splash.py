@@ -10,12 +10,12 @@ _FALLBACK_ART = r"""
 '-.  .-'| .-. :|  .--'|        || .--'|  .-.  |' ,-.  ||      \
   |  |  \   --.|  |   |  |  |  |\ `--.|  | |  |\ '-'  ||  ||  |
   `--'   `----'`--'   `--`--`--' `---'`--' `--' `--`--'`--''--'
-""".strip()
+"""
 
 # load art from repo root (two levels up from this file)
 try:
     _art_path = Path(__file__).resolve().parent.parent.parent / "art.txt"
-    _ART = _art_path.read_text().strip() or _FALLBACK_ART
+    _ART = _art_path.read_text() or _FALLBACK_ART
 except Exception:
     _ART = _FALLBACK_ART
 
