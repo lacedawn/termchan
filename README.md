@@ -22,8 +22,8 @@ browse 4chan from your terminal
 pip install -e .
 ```
 
-needs python 3.11+ and a terminal with mouse support.
-for best image quality, use a terminal with kitty graphics protocol (kitty, wezterm, etc).
+needs python 3.11+.
+use a terminal with kitty graphics protocol (kitty, wezterm, etc).
 
 ## run
 
