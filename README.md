@@ -10,6 +10,15 @@
 
 browse 4chan from your terminal
 
+## screenshots
+
+<div align="center">
+  <img src="screenshots/termchan1.png" width="49%">
+  <img src="screenshots/termchan2.png" width="49%">
+  <img src="screenshots/termchan3.png" width="49%">
+  <img src="screenshots/termchan4.png" width="49%">
+</div>
+
 ## install
 
 ```bash
