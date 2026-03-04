@@ -129,9 +129,11 @@ class PostWidget(Vertical, can_focus=True):
         url = self.post.image_url(self.board_name)
         if not url: return
 
-        self.app.notify("Downloading…", timeout=2)
-        data = await download(url)
-        open_data_external(data, self.post.ext or ".jpg")
+        if self._cached_img is None:
+            self.app.notify("Downloading…", timeout=2)
+            self._cached_img = await download(url)
+
+        open_data_external(self._cached_img, self.post.ext or ".jpg")
 
 
 class ThreadViewScreen(Screen):

@@ -34,7 +34,7 @@ class _Limiter:
 # rethinking if this ever became a library
 _limiter = _Limiter()
 _client: httpx.AsyncClient | None = None
-_etags: dict[str, str] = {}    # url -> Last-Modified, for conditional requests
+_last_modified: dict[str, str] = {}    # url -> Last-Modified, for conditional requests
 
 
 async def _ensure_client() -> httpx.AsyncClient:
@@ -60,8 +60,8 @@ async def _get(url: str, cache: bool = True) -> dict | list | None:
     client = await _ensure_client()
 
     headers = {}
-    if cache and url in _etags:
-        headers["If-Modified-Since"] = _etags[url]
+    if cache and url in _last_modified:
+        headers["If-Modified-Since"] = _last_modified[url]
 
     try:
         r = await client.get(url, headers=headers)
@@ -79,7 +79,7 @@ async def _get(url: str, cache: bool = True) -> dict | list | None:
         raise APIError(f"HTTP {r.status_code}: {url}", status=r.status_code)
 
     if "Last-Modified" in r.headers:
-        _etags[url] = r.headers["Last-Modified"]
+        _last_modified[url] = r.headers["Last-Modified"]
     return r.json()
 
 
@@ -100,8 +100,6 @@ async def fetch_catalog(board_name: str) -> list[CatalogThread]:
 
 
 async def fetch_thread(board_name: str, thread_no: int) -> list[Post]:
-    # don't use etag cache here — we don't store response bodies,
-    # so a 304 would give us nothing to show
     data = await _get(f"{API_BASE}/{board_name}/thread/{thread_no}.json", cache=False)
     if not data: return []
     return [Post.from_json(p) for p in data.get("posts", [])]

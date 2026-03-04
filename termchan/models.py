@@ -99,7 +99,7 @@ class CatalogThread:
     semantic_url: str = ""
     sticky: bool = False
     closed: bool = False
-    last_replies: list = field(default_factory=list)  # list[Post]
+    last_replies: list[Post] = field(default_factory=list)
     omitted_posts: int = 0
     omitted_images: int = 0
 

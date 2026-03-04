@@ -1,4 +1,4 @@
-import importlib.resources
+from pathlib import Path
 from textual.app import ComposeResult
 from textual.containers import Center, Middle
 from textual.screen import Screen
@@ -12,10 +12,10 @@ _FALLBACK_ART = r"""
   `--'   `----'`--'   `--`--`--' `---'`--' `--' `--`--'`--''--'
 """.strip()
 
-# load art from package data if available
+# load art from repo root (two levels up from this file)
 try:
-    _art_ref = importlib.resources.files("termchan").joinpath("../art.txt")
-    _ART = _art_ref.read_text().strip() or _FALLBACK_ART
+    _art_path = Path(__file__).resolve().parent.parent.parent / "art.txt"
+    _ART = _art_path.read_text().strip() or _FALLBACK_ART
 except Exception:
     _ART = _FALLBACK_ART
 
