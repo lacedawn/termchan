@@ -27,7 +27,7 @@ class ThreadItem(ListItem):
         preview = strip_html(t.com).replace("\n", " ")
         if len(preview) > 120: preview = preview[:120] + "…"
 
-        yield Static(f"[bold]{title}[/bold]\n[dim]{preview}[/dim]\n[cyan]{stats}[/cyan]")
+        yield Static(f"[bold yellow]{title}[/bold yellow]\n[dim]{preview}[/dim]\n[cyan]{stats}[/cyan]")
 
 
 class CatalogScreen(Screen):

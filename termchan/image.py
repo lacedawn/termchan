@@ -51,7 +51,7 @@ def open_data_external(data: bytes, ext: str = ".jpg") -> None:
     _open_in_viewer(tmp.name)
 
 
-def make_widget(image_bytes: bytes):
+def make_widget(image_bytes: bytes, max_width: int = 600):
     try:
         from textual_image.widget import Image
     except ImportError:
@@ -63,6 +63,10 @@ def make_widget(image_bytes: bytes):
         # some pngs are palette mode which textual-image chokes on
         if img.mode not in ("RGB", "RGBA"):
             img = img.convert("RGB")
+        # scale down so it doesn't eat the whole terminal
+        if img.width > max_width:
+            ratio = max_width / img.width
+            img = img.resize((max_width, int(img.height * ratio)), PILImage.LANCZOS)
         return Image(img)
     except Exception as e:
         log.error("couldn't create image widget: %s", e)

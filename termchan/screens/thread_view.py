@@ -25,8 +25,8 @@ class PostWidget(Vertical, can_focus=True):
         border: solid $accent;
     }
     PostWidget .post-img {
-        width: 80;
-        height: 40;
+        width: 60;
+        height: 20;
         margin: 1 0;
     }
     """
