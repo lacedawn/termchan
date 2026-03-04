@@ -100,7 +100,9 @@ async def fetch_catalog(board_name: str) -> list[CatalogThread]:
 
 
 async def fetch_thread(board_name: str, thread_no: int) -> list[Post]:
-    data = await _get(f"{API_BASE}/{board_name}/thread/{thread_no}.json")
+    # don't use etag cache here — we don't store response bodies,
+    # so a 304 would give us nothing to show
+    data = await _get(f"{API_BASE}/{board_name}/thread/{thread_no}.json", cache=False)
     if not data: return []
     return [Post.from_json(p) for p in data.get("posts", [])]
 
