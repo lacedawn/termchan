@@ -35,6 +35,7 @@ class _Limiter:
 _limiter = _Limiter()
 _client: httpx.AsyncClient | None = None
 _last_modified: dict[str, str] = {}    # url -> Last-Modified, for conditional requests
+_cache_data: dict[str, dict | list] = {} # url -> JSON data
 
 
 async def _ensure_client() -> httpx.AsyncClient:
@@ -72,15 +73,18 @@ async def _get(url: str, cache: bool = True) -> dict | list | None:
     except httpx.HTTPError as e:
         raise APIError(str(e))
 
-    if r.status_code == 304: return None
+    if r.status_code == 304: 
+        return _cache_data.get(url)  # return the cached json we saved earlier
     if r.status_code == 404:
         raise ThreadNotFound(f"Not found: {url}", status=404)
     if r.status_code != 200:
         raise APIError(f"HTTP {r.status_code}: {url}", status=r.status_code)
 
+    data = r.json()
     if "Last-Modified" in r.headers:
         _last_modified[url] = r.headers["Last-Modified"]
-    return r.json()
+        _cache_data[url] = data
+    return data
 
 
 async def fetch_boards() -> list[Board]:
@@ -100,7 +104,7 @@ async def fetch_catalog(board_name: str) -> list[CatalogThread]:
 
 
 async def fetch_thread(board_name: str, thread_no: int) -> list[Post]:
-    data = await _get(f"{API_BASE}/{board_name}/thread/{thread_no}.json", cache=False)
+    data = await _get(f"{API_BASE}/{board_name}/thread/{thread_no}.json")
     if not data: return []
     return [Post.from_json(p) for p in data.get("posts", [])]
 
