@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+import html
 import re
 
 from termchan.config import IMAGE_BASE
@@ -53,8 +54,10 @@ class Post:
     @classmethod
     def from_json(cls, d: dict) -> "Post":
         return cls(
-            no=d["no"], now=d.get("now", ""), name=d.get("name", "Anonymous"),
-            com=d.get("com", ""), sub=d.get("sub", ""),
+            no=d["no"], now=d.get("now", ""), 
+            name=html.unescape(d.get("name", "Anonymous")),
+            com=d.get("com", ""), 
+            sub=html.unescape(d.get("sub", "")),
             tim=d.get("tim"), ext=d.get("ext"), filename=d.get("filename"),
             w=d.get("w", 0), h=d.get("h", 0),
             tn_w=d.get("tn_w", 0), tn_h=d.get("tn_h", 0),
@@ -107,8 +110,10 @@ class CatalogThread:
     def from_json(cls, d: dict) -> "CatalogThread":
         last = [Post.from_json(r) for r in d.get("last_replies", [])]
         return cls(
-            no=d["no"], now=d.get("now", ""), name=d.get("name", "Anonymous"),
-            com=d.get("com", ""), sub=d.get("sub", ""),
+            no=d["no"], now=d.get("now", ""), 
+            name=html.unescape(d.get("name", "Anonymous")),
+            com=d.get("com", ""), 
+            sub=html.unescape(d.get("sub", "")),
             replies=d.get("replies", 0), images=d.get("images", 0),
             tim=d.get("tim"), ext=d.get("ext"), filename=d.get("filename"),
             semantic_url=d.get("semantic_url", ""),
